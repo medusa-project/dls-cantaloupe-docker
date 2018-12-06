@@ -1,3 +1,7 @@
+##
+# This file is for Cantaloupe 4.1-SNAPSHOT as of 2018-12-06.
+#
+
 require 'json'
 
 java_import java.net.HttpURLConnection
@@ -10,14 +14,9 @@ java_import java.util.stream.Collectors
 
 class CustomDelegate
 
-  FILESYSTEMSOURCE_PATHNAME = '/bucket'
-
   attr_accessor :context
 
-  def redirect(options = {})
-  end
-
-  def authorized?(options = {})
+  def authorize(options = {})
     true
   end
 
@@ -32,44 +31,6 @@ class CustomDelegate
   end
 
   def filesystemsource_pathname(options = {})
-    identifier = context['identifier']
-
-    # This is used for a demo at https://medusa-project.github.io/cantaloupe/
-    if identifier == 'andromeda-pyramidal-tiled.tif'
-      return FILESYSTEMSOURCE_PATHNAME + '/' + identifier;
-    end
-
-    url = URL.new(ENV['MEDUSA_URL'] + '/uuids/' +
-        URI.escape(identifier) + '.json')
-
-    conn, is, reader = nil
-    begin
-      conn = url.openConnection
-      conn.setRequestMethod 'GET'
-      conn.setReadTimeout 30 * 1000
-      conn.setRequestProperty('Authorization', 'Basic ' + encoded_credential)
-      conn.connect
-      is = conn.getInputStream
-      status = conn.getResponseCode
-
-      if status == 200
-        reader = BufferedReader.new(InputStreamReader.new(is))
-        entity = reader.lines.collect(Collectors.joining("\n"))
-
-        return FILESYSTEMSOURCE_PATHNAME + '/' +
-            JSON.parse(entity)['relative_pathname'].reverse.chomp('/').reverse
-      else
-        raise IOError, "Unexpected response status: #{status}"
-      end
-    rescue FileNotFoundException => e
-      return nil
-    rescue => e
-      Java::edu.illinois.library.cantaloupe.script.Logger.warn("#{e}")
-    ensure
-      reader&.close
-      is&.close
-      conn&.disconnect
-    end
   end
 
   def httpsource_resource_info(options = {})
