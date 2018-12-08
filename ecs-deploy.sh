@@ -12,4 +12,5 @@ aws ecs update-service \
     --region $AWS_REGION \
     --cluster $ECS_CLUSTER \
     --service $ECS_SERVICE \
-    --force-new-deployment
+    --desired-count $TASK_COUNT \
+    --force-new-deployment \
