@@ -13,8 +13,9 @@ WORKDIR $home
 # Copy the compressed archive into the image and extract it
 COPY ./image_files/cantaloupe-*.zip ./cantaloupe.zip
 RUN unzip cantaloupe.zip
+RUN rm cantaloupe.zip
 
-# Install KakaduNativeProcessor & KakaduDemoProcessor dependencies
+# Install KakaduNativeProcessor dependencies
 RUN cp cantaloupe-*/deps/Linux-x86-64/bin/* /usr/local/bin
 RUN cp cantaloupe-*/deps/Linux-x86-64/lib/* /usr/local/lib
 RUN mv cantaloupe-*/cantaloupe-*.war cantaloupe.war
