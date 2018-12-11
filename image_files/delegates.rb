@@ -9,6 +9,7 @@ java_import java.net.URL
 java_import java.io.BufferedReader
 java_import java.io.FileNotFoundException
 java_import java.io.InputStreamReader
+java_import java.util.Base64
 java_import java.util.stream.Collectors
 
 class CustomDelegate
@@ -55,7 +56,7 @@ class CustomDelegate
       }
     end
 
-    url = URL.new(ENV['DLS_URL'] + '/binaries/' +
+    url = URL.new(ENV['MEDUSA_URL'] + '/uuids/' +
         URI.escape(identifier) + '.json')
 
     conn, is, reader = nil
@@ -63,6 +64,7 @@ class CustomDelegate
       conn = url.openConnection
       conn.setRequestMethod 'GET'
       conn.setReadTimeout 30 * 1000
+      conn.setRequestProperty('Authorization', 'Basic ' + encoded_credential)
       conn.connect
       is = conn.getInputStream
       status = conn.getResponseCode
@@ -72,7 +74,7 @@ class CustomDelegate
         entity = reader.lines.collect(Collectors.joining("\n"))
         return {
           'bucket' => ENV['CANTALOUPE_S3SOURCE_BUCKET'],
-          'key' => JSON.parse(entity)['object_key'].reverse.chomp('/').reverse
+          'key' => JSON.parse(entity)['relative_pathname'].reverse.chomp('/').reverse
         }
       else
         raise IOError, "Unexpected response status: #{status}"
@@ -86,6 +88,11 @@ class CustomDelegate
       is&.close
       conn&.disconnect
     end
+  end
+
+  def encoded_credential
+    Base64.getEncoder.encodeToString(
+        (ENV['MEDUSA_USER'] + ':' + ENV['MEDUSA_SECRET']).bytes)
   end
 
   def overlay(options = {})
