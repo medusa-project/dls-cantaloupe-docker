@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 #
-# Prints service status.
+# Prints service status from `aws ecs describe-services` in a more readable
+# format than huge-wall-of-JSON.
 #
 
 require 'json'

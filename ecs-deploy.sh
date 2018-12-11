@@ -2,7 +2,7 @@
 #
 # Tells the ECS service to force a new rolling deployment. This will cause
 # it to spin up however many new tasks from the `latest`-tagged container,
-# insert them into the task pool, and then remove the old ones.
+# insert them into the task pool, and remove the old ones.
 #
 
 source ./env.sh
