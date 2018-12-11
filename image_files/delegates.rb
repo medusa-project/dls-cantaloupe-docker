@@ -51,7 +51,7 @@ class CustomDelegate
     # This is used for a demo at https://medusa-project.github.io/cantaloupe/
     if identifier == 'andromeda-pyramidal-tiled.tif'
       return {
-          'bucket' => ENV['CANTALOUPE_S3SOURCE_BUCKET'],
+          'bucket' => ENV['CANTALOUPE_S3SOURCE_BUCKET_NAME'],
           'key' => identifier
       }
     end
@@ -73,7 +73,7 @@ class CustomDelegate
         reader = BufferedReader.new(InputStreamReader.new(is))
         entity = reader.lines.collect(Collectors.joining("\n"))
         return {
-          'bucket' => ENV['CANTALOUPE_S3SOURCE_BUCKET'],
+          'bucket' => ENV['CANTALOUPE_S3SOURCE_BUCKET_NAME'],
           'key' => JSON.parse(entity)['relative_pathname'].reverse.chomp('/').reverse
         }
       else

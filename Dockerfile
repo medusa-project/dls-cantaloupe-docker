@@ -2,7 +2,6 @@ FROM openjdk:11
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
     ffmpeg \
   && rm -rf /var/lib/apt/lists/*
 
@@ -16,6 +15,7 @@ RUN unzip cantaloupe.zip
 RUN rm cantaloupe.zip
 
 # Install KakaduNativeProcessor dependencies
+RUN mkdir -p /usr/local/bin /usr/local/lib
 RUN cp cantaloupe-*/deps/Linux-x86-64/bin/* /usr/local/bin
 RUN cp cantaloupe-*/deps/Linux-x86-64/lib/* /usr/local/lib
 RUN mv cantaloupe-*/cantaloupe-*.war cantaloupe.war
