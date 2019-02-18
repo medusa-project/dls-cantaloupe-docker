@@ -7,7 +7,7 @@ Library Service](https://digital.library.illinois.edu/).
   on HTTP port 8182.
 * The source is S3Source and its lookup strategy is `ScriptLookupStrategy`.
 * Identifiers are Medusa file UUIDs. The S3Source delegate method calls the
-  DLS public HTTP API to look up their S3 object keys.
+  Medusa HTTP API to look up their S3 object keys.
 * The derivative cache is S3Cache.
 
 # Build
