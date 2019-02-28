@@ -24,7 +24,13 @@ class CustomDelegate
     {}
   end
 
+  ##
+  # Identifiers that start with "v/" indicate video stills to be served from
+  # UI MediaSpace (https://mediaspace.illinois.edu). All others are to be
+  # served from S3.
+  #
   def source(options = {})
+    context['identifier'].start_with?('v/') ? 'HttpSource' : 'S3Source'
   end
 
   def azurestoragesource_blob_key(options = {})
@@ -33,7 +39,27 @@ class CustomDelegate
   def filesystemsource_pathname(options = {})
   end
 
+  ##
+  # Used for serving video still images from UI MediaSpace
+  # (https://mediaspace.illinois.edu). Identifiers must have the following
+  # format:
+  #
+  # v/:id/:id/:id
+  #
   def httpsource_resource_info(options = {})
+    identifier = context['identifier']
+    parts = identifier.split('/')
+    if parts.length == 4
+      # We don't know the full dimensions so we choose a reasonable width that
+      # will allow us to get a decent quality thumbnail.
+      # Since these are videos, we can assume that almost all will have a
+      # 4:3 or 16:9 w:h ratio.
+      width = 1000
+      return sprintf('https://cdnsecakmi.kaltura.com/p/%s/sp/%s/thumbnail'\
+        '/entry_id/%s/version/100001/width/%d',
+        parts[1], parts[2], parts[3], width)
+    end
+    nil
   end
 
   def jdbcsource_database_identifier(options = {})
@@ -45,6 +71,10 @@ class CustomDelegate
   def jdbcsource_lookup_sql(options = {})
   end
 
+  ##
+  # Used for serving images from Medusa. Looks up object keys based on their
+  # Medusa file UUIDs.
+  #
   def s3source_object_info(options = {})
     identifier = context['identifier']
 
