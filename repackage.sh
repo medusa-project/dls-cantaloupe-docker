@@ -2,5 +2,6 @@ CWD=$(pwd)
 cd ../cantaloupe
 mvn clean package -DskipTests
 cd $CWD
-cp ../cantaloupe/target/cantaloupe-4.1-SNAPSHOT.zip ./image_files
+rm ./image_files/cantaloupe-*.zip
+cp ../cantaloupe/target/cantaloupe-*-SNAPSHOT.zip ./image_files
 ./docker-build.sh
