@@ -1,7 +1,13 @@
+#!/bin/sh
+#
+# Builds Cantaloupe from the working copy, copies the resulting zip file
+# into place, and rebuilds the image.
+
 CWD=$(pwd)
-cd ../cantaloupe
+CANTALOUPE_DIR=../../cantaloupe-project/cantaloupe
+cd $CANTALOUPE_DIR
 mvn clean package -DskipTests
 cd $CWD
 rm ./image_files/cantaloupe-*.zip
-cp ../cantaloupe/target/cantaloupe-*-SNAPSHOT.zip ./image_files
+cp $CANTALOUPE_DIR/target/cantaloupe-*.zip ./image_files
 ./docker-build.sh
