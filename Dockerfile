@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:15
 
 # Install FfmpegProcessor dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,7 +22,7 @@ RUN rm cantaloupe.zip
 RUN mkdir -p /usr/local/bin /usr/local/lib
 RUN cp cantaloupe-*/deps/Linux-x86-64/bin/* /usr/local/bin
 RUN cp cantaloupe-*/deps/Linux-x86-64/lib/* /usr/local/lib
-RUN mv cantaloupe-*/cantaloupe-*.war cantaloupe.war
+RUN mv cantaloupe-*/cantaloupe-*.jar cantaloupe.jar
 
 COPY ./image_files/cantaloupe.properties ./cantaloupe.properties
 COPY ./image_files/delegates.rb ./delegates.rb
@@ -32,4 +32,4 @@ RUN mkdir -p /bucket
 
 ENTRYPOINT ["java", "-Dcantaloupe.config=cantaloupe.properties", \
     "-Djava.library.path=/usr/local/lib", \
-    "-jar", "cantaloupe.war"]
+    "-jar", "cantaloupe.jar"]

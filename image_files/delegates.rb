@@ -16,11 +16,25 @@ class CustomDelegate
 
   attr_accessor :context
 
+  def deserialize_meta_identifier(meta_identifier)
+  end
+
+  def serialize_meta_identifier(components)
+  end
+
+  def pre_authorize(options = {})
+    true
+  end
+
   def authorize(options = {})
     true
   end
 
   def extra_iiif2_information_response_keys(options = {})
+    {}
+  end
+
+  def extra_iiif3_information_response_keys(options = {})
     {}
   end
 
@@ -104,7 +118,7 @@ class CustomDelegate
     rescue FileNotFoundException => e
       return nil
     rescue => e
-      Java::edu.illinois.library.cantaloupe.script.Logger.warn("#{e}")
+      Java::edu.illinois.library.cantaloupe.delegate.Logger.warn("#{e}")
     ensure
       reader&.close
       is&.close
