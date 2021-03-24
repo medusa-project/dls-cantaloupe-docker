@@ -1,0 +1,9 @@
+version: "2"
+services:
+  cantaloupe:
+    build:
+      context: .
+    ports:
+      - 8182:8182
+    env_file:
+      - env.list

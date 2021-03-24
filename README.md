@@ -5,6 +5,8 @@ Library Service](https://digital.library.illinois.edu/).
 
 * Cantaloupe runs in standalone mode, using its embedded web server listening
   on HTTP port 8182.
+* AWS credentials are obtained from a task IAM role. When running locally,
+  these are obtained from an [ECS Local Endpoint](https://aws.amazon.com/blogs/compute/a-guide-to-locally-testing-containers-with-amazon-ecs-local-endpoints-and-docker-compose/).  
 * Identifiers are Medusa file UUIDs. The S3Source delegate method calls the
   Medusa HTTP API to look up their S3 object keys.
 * The source for all Medusa content is S3Source and its lookup strategy is
@@ -40,12 +42,14 @@ Library Service](https://digital.library.illinois.edu/).
 
 ## Locally
 
-1. `./docker-run.sh`
-2. It's now listening at `http://localhost:8182`.
+1. `aws login` ([GitHub](https://github.com/techservicesillinois/awscli-login))
+2. `docker-compose up --build`
+
+It's now listening at `http://localhost:8182`.
 
 ## In ECS
 
-In ECS, `env.list` isn't used, and all of its variables have to be set in
+In ECS, `env.list` isn't used, so all of its variables have to be set in
 the task definition.
 
 1. `./ecr-push.sh`
