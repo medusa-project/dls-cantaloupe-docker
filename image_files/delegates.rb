@@ -131,6 +131,9 @@ class CustomDelegate
         (ENV['MEDUSA_USER'] + ':' + ENV['MEDUSA_SECRET']).bytes)
   end
 
+  def metadata(options = {})
+  end
+
   def overlay(options = {})
   end
 

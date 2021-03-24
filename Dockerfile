@@ -26,9 +26,6 @@ RUN mkdir -p /usr/local/lib \
 COPY ./image_files/cantaloupe.properties ./cantaloupe.properties
 COPY ./image_files/delegates.rb ./delegates.rb
 
-# Mount the images bucket
-RUN mkdir -p /bucket
-
 ENTRYPOINT ["java", "-Dcantaloupe.config=cantaloupe.properties", \
     "-Djava.library.path=/usr/local/lib", \
     "-jar", "cantaloupe.jar"]
