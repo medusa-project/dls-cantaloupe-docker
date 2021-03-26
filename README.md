@@ -3,8 +3,7 @@ Library Service](https://digital.library.illinois.edu/).
 
 # Instance Overview
 
-* Cantaloupe runs in standalone mode, using its embedded web server listening
-  on HTTP port 8182.
+* Cantaloupe listens on HTTP port 8182.
 * AWS credentials are obtained from a task IAM role. When running locally,
   these are obtained from an [ECS Local Endpoint](https://aws.amazon.com/blogs/compute/a-guide-to-locally-testing-containers-with-amazon-ecs-local-endpoints-and-docker-compose/).  
 * Identifiers are Medusa file UUIDs. The S3Source delegate method calls the
@@ -19,7 +18,7 @@ Library Service](https://digital.library.illinois.edu/).
     * JPEG: TurboJpegProcessor
     * JPEG2000: KakaduNativeProcessor
     * PDF: PdfBoxProcessor
-    * Videos: FfmpegProcessor (which doesn't work well with non-filesystem
+    * Videos: FfmpegProcessor (which works very poorly with non-filesystem
       storage, so serving video stills is not advised)
     * Everything else: Java2dProcessor
 
@@ -55,3 +54,10 @@ the task definition.
 1. `./ecr-push.sh`
 2. `./ecs-deploy.sh`
 3. Check the status via the AWS web console or `./ecs-status.rb`.
+
+# ECS Configuration Notes
+
+Images are tagged with the Cantaloupe version. There is also a `latest` tag
+applied to the latest version which is what is specified in the task
+definition. If there is ever a need to revert to a previous version, the
+task definition must be updated (in Terraform) to specify that version.
