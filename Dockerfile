@@ -26,6 +26,13 @@ RUN mkdir -p /usr/local/lib \
 COPY ./image_files/cantaloupe.properties ./cantaloupe.properties
 COPY ./image_files/delegates.rb ./delegates.rb
 
+# When you run the JVM in a container with no arguments,
+# XX:MaxRAMPercentage (really heap size) defaults to 25, which is
+# way too low. PDFBox in particular is a "hungry hungry heapo" that
+# can easily consume all of that in a single request.
+# But we also need to keep in mind that Kakadu does its work
+# off-heap.
 ENTRYPOINT ["java", "-Dcantaloupe.config=cantaloupe.properties", \
     "-Djava.library.path=/usr/local/lib", \
+    "-XX:MaxRAMPercentage=65", \
     "-jar", "cantaloupe.jar"]
