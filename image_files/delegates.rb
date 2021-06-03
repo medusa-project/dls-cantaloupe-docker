@@ -31,11 +31,20 @@ class CustomDelegate
   end
 
   def extra_iiif2_information_response_keys(options = {})
-    {}
+    extra_information_response_keys
   end
 
   def extra_iiif3_information_response_keys(options = {})
-    {}
+    extra_information_response_keys
+  end
+
+  def extra_information_response_keys
+    {
+      'page_count' => context['page_count'],
+      'exif'       => context.dig('metadata', 'exif'),
+      'iptc'       => context.dig('metadata', 'iptc'),
+      'xmp'        => context.dig('metadata', 'xmp_string')
+    }
   end
 
   ##
