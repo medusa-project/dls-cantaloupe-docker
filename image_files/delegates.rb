@@ -3,6 +3,7 @@
 #
 
 require 'json'
+require 'uri'
 
 java_import java.net.HttpURLConnection
 java_import java.net.URL
@@ -102,7 +103,7 @@ class CustomDelegate
     identifier = context['identifier']
 
     url = URL.new(ENV['MEDUSA_URL'] + '/uuids/' +
-        URI.escape(identifier) + '.json')
+        ::URI.escape(identifier) + '.json')
 
     conn, is, reader = nil
     begin
