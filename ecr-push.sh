@@ -7,8 +7,6 @@ source ./env.sh
 
 eval $(aws ecr get-login --no-include-email --region $AWS_REGION --profile $AWS_PROFILE)
 
-./docker-build.sh
-
 # add version tag
 TAG=$APP_NAME:$CANTALOUPE_VERSION
 docker tag $TAG $ECR_HOST/$TAG
