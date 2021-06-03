@@ -2,4 +2,4 @@
 
 source ./env.sh
 
-docker-compose up --build
+docker compose up
