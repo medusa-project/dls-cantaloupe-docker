@@ -2,6 +2,7 @@
 # This file is for Cantaloupe 4.1-SNAPSHOT as of 2018-12-06.
 #
 
+require 'cgi'
 require 'json'
 require 'uri'
 
@@ -95,15 +96,21 @@ class CustomDelegate
   def jdbcsource_lookup_sql(options = {})
   end
 
-  ##
-  # Used for serving images from Medusa. Looks up object keys based on their
-  # Medusa file UUIDs.
-  #
   def s3source_object_info(options = {})
+    # The identifier may be a Medusa file UUID or a full S3 URL.
+    # Full S3 URLs only work in production and not with e.g. a local MinIO
+    # server.
     identifier = context['identifier']
+    matches    = identifier.match(/^s3:\/\/([a-z0-9.-]+)\/(.*)/)
+    if matches
+      return {
+        'bucket' => matches[1],
+        'key'    => matches[2]
+      }
+    end
 
     url = URL.new(ENV['MEDUSA_URL'] + '/uuids/' +
-        ::URI.escape(identifier) + '.json')
+        CGI.escape(identifier) + '.json')
 
     conn, is, reader = nil
     begin
@@ -120,7 +127,7 @@ class CustomDelegate
         entity = reader.lines.collect(Collectors.joining("\n"))
         return {
           'bucket' => ENV['S3SOURCE_BUCKET_NAME'],
-          'key' => JSON.parse(entity)['relative_pathname'].reverse.chomp('/').reverse
+          'key'    => JSON.parse(entity)['relative_pathname'].reverse.chomp('/').reverse
         }
       else
         raise IOError, "Unexpected response status: #{status}"

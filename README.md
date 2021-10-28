@@ -5,14 +5,17 @@ Library Service](https://digital.library.illinois.edu/).
 
 * Cantaloupe listens on HTTP port 8182.
 * AWS credentials are obtained from a task IAM role. When running locally,
-  these are obtained from an [ECS Local Endpoint](https://aws.amazon.com/blogs/compute/a-guide-to-locally-testing-containers-with-amazon-ecs-local-endpoints-and-docker-compose/).  
-* Identifiers are Medusa file UUIDs. The S3Source delegate method calls the
-  Medusa HTTP API to look up their S3 object keys.
+  these are obtained from an [ECS Local Endpoint](https://aws.amazon.com/blogs/compute/a-guide-to-locally-testing-containers-with-amazon-ecs-local-endpoints-and-docker-compose/).
+* There are three supported identifier schemes:
+    1. Medusa file UUIDs. The S3Source delegate method calls the Medusa HTTP
+       API to look up their object keys.
+    2. Full S3 URLs (`s3://...`).
+    3. Strings starting with `v/` are video thumbnails for which `HttpSource`
+       is used to get an image from [Kaltura](https://mediaspace.illinois.edu),
+       because of `FfmpegProcessor` limitations (see below). There are a very
+       small number of these.
 * The source for all Medusa content is S3Source and its lookup strategy is
   `ScriptLookupStrategy`.
-    * There are also a very small number of videos for which `HttpSource` is
-      used to get an image from [Kaltura](https://mediaspace.illinois.edu),
-      because of `FfmpegProcessor` limitations (see below).
 * The derivative cache is S3Cache.
 * Format assignments:
     * JPEG: TurboJpegProcessor
