@@ -2,4 +2,6 @@
 
 source ./env.sh
 
-docker compose up --build
+echo "WARNING: the container is not rebuilt!"
+
+docker compose up
